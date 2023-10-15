@@ -1,0 +1,151 @@
+button {
+  width: 200px;
+}
+#container {
+  border-bottom: 3px solid black;
+}
+.stats-div {
+  display: flex;
+  gap: 5rem;
+  justify-content: space-evenly;
+}
+.stats-container {
+  text-align: left;
+}
+.menu-div {
+  font-family: sans-serif;
+  display: flex;
+  justify-content: space-evenly;
+  border-bottom: 2px solid black;
+  padding: 1rem;
+  text-align: center;
+  width: 1200px;
+  background-color: rgb(255, 255, 255);
+  margin: auto;
+  box-sizing: border-box;
+}
+
+#modal-div {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8); /* Black w/ opacity */
+}
+#modal-close-btn {
+  position: absolute;
+  bottom: 150px;
+  margin: 1rem;
+  padding: 0.5rem;
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: rgb(255, 255, 255);
+  cursor: pointer;
+  z-index: 20;
+}
+#modal-content {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 1),
+    rgba(255, 255, 255, 0.9),
+    rgba(255, 255, 255, 0.5) 99%
+  );
+  border: 2px solid black;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  min-height: 200px;
+  width: 80%;
+  z-index: 10;
+}
+
+.friendly,
+.enemy,
+.monster,
+.damage {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+.friendly {
+  color: green;
+}
+.enemy {
+  color: red;
+}
+.monster {
+  color: purple;
+}
+.damage {
+  color: yellow;
+}
+#output-div {
+  max-height: 220px;
+  overflow-y: scroll;
+  background-image: linear-gradient(150deg, #98b2da, #bba289);
+}
+p {
+  animation: forwards fade 5ms;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 100;
+  }
+}
+hr {
+  margin: 1rem;
+}
+
+.mana-bar-container img {
+  height: 50px;
+  left: -50px;
+}
+
+.healer-container {
+  position: relative;
+  left: 50px;
+  top: 250px;
+}
+
+.lumberjack-container {
+  left: 50px;
+  top: 310px;
+}
+
+/* Optional Mana Div Supports */
+#william-the-healer-mana-div,
+#jack-the-lumberjack-mana-div {
+  width: 0;
+  height: 50px;
+  background-color: rgb(0, 90, 255);
+}
+
+.mana-bar-container {
+  position: absolute;
+  height: 50px;
+  width: 200px;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(50, 50, 50);
+}
+
+#nameless-knight-hp-div,
+#julia-the-archer-hp-div,
+#the-cat-hp-div {
+  width: 0;
+  height: 50px;
+  background-color: rgb(90, 180, 90);
+  transition: ease-in-out 0.5s;
+}
+
+#big-boss-hp-div {
+  width: 0;
+  height: 50px;
+  background-color: rgb(190, 190, 90);
+  transition: ease-in-out 0.5s;
+}
