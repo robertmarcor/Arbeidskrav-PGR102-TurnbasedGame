@@ -23,9 +23,9 @@ const nameslessHealthBar = document.getElementById("nameless-knight-hp-div");
 const namelessID = document.getElementById("nameless-knight");
 const namelessKnight = new Hero(
   "Nameless Knight",
-  120 /* HP */,
-  20 /* DMG */,
-  80 /* Main Stat */,
+  150 /* HP */,
+  25 /* DMG */,
+  300 /* Main Stat */,
   nameslessHealthBar /* Health Bar */,
   namelessID /* ID Selector */
 );
@@ -45,7 +45,7 @@ const theCat = new Hero(
   "The Cat",
   50 /* HP */,
   100 /* DMG */,
-  80 /* Main Stat */,
+  400 /* Main Stat */,
   catHealthBar /* Health Bar */,
   catID /* ID Selector */
 );
@@ -56,7 +56,7 @@ const bigBoss = new Boss(
   "Big Boss",
   1000 /* HP */,
   20 /* DMG */,
-  100 /* Main Stat */,
+  80 /* Main Stat */,
   false /* Enrage */,
   bossHealthBar /* Health Bar */,
   bossID /* ID Selector */
@@ -140,7 +140,7 @@ let monsterAlive = false;
 let randomMonster;
 function spawnMonster() {
   //Set spawn chance, eg. 2 = 50% chance, 3 = 33% chance, 4 = 25% chance since 1/2, 1/3, 1/4
-  let spawnChance = 2;
+  let spawnChance = 4;
   let roll = Math.floor(Math.random() * spawnChance + 1);
   //Possible spawns
   let monsters = [slime, bat];
