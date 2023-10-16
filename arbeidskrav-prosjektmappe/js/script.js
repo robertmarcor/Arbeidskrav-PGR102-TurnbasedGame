@@ -1,5 +1,6 @@
 //Characters are constructed with name, health, damage, mainStat, healthBar, idSelector
 import { Hero } from "./characterStats.js";
+import { Support } from "./characterStats.js";
 import { Boss } from "./characterStats.js";
 import { Monster } from "./characterStats.js";
 
@@ -49,6 +50,27 @@ const theCat = new Hero(
   catHealthBar /* Health Bar */,
   catID /* ID Selector */
 );
+// Construct Support Stats/////////////////////////////////////
+const williamManaBar = document.getElementById("william-the-healer-mana-div");
+const williamID = document.getElementById("william-the-healer");
+const williamTheHealer = new Support(
+  "William the Healer",
+  100 /* Mana */,
+  50 /* Base Stat */,
+  1.2 /* Supporting Multiplier */,
+  williamManaBar /* Mana Bar */,
+  williamID /* ID Selector */
+);
+const jackManaBar = document.getElementById("jack-the-lumberjack-mana-div");
+const jackID = document.getElementById("jack-the-lumberjack");
+const jackTheLumberjack = new Support(
+  "Jack the Lumberjack",
+  100 /* Mana */,
+  50 /* Base Heal */,
+  1.2 /* Supporting Multiplier */,
+  jackManaBar /* Mana Bar */,
+  jackID /* ID Selector */
+);
 // Construct Boss Stats///////////////////////////////
 const bossHealthBar = document.getElementById("big-boss-hp-div");
 const bossID = document.getElementById("big-boss");
@@ -77,6 +99,10 @@ function setHealthBar() {
   juliaTheArcher.healthBar.style.width = "100%";
   theCat.healthBar.style.width = "100%";
   bigBoss.healthBar.style.width = "100%";
+}
+function setManaBar() {
+  williamTheHealer.manaBar.style.width = "100%";
+  jackTheLumberjack.manaBar.style.width = "100%";
 }
 function updateHealthBar(target) {
   //Health bars are set to 100% width at the start.
@@ -169,6 +195,7 @@ function gameLoop() {
   }, 200);
   return turnCounter;
 }
+function supportTurn() {}
 // Main game loop, will playout a full turn once a hero is clicked
 let playerTurn = true;
 function playTurn(hero, randomMonster, monsterAlive) {
@@ -177,9 +204,15 @@ function playTurn(hero, randomMonster, monsterAlive) {
     namelessKnight.idSelector.style.pointerEvents = "none";
     juliaTheArcher.idSelector.style.pointerEvents = "none";
     theCat.idSelector.style.pointerEvents = "none";
+    williamTheHealer.idSelector.style.pointerEvents = "none";
+    jackTheLumberjack.idSelector.style.pointerEvents = "none";
   }
   // Set player turn to false, so that it can be toggled again.
   playerTurn = false;
+
+  if (hero == williamTheHealer || hero == jackTheLumberjack) {
+    supportTurn(hero);
+  }
 
   // Check if monster a monster has spawned, if yes, prevent attacking boss.
   // Target automatilly assigned to monster if it is alive
@@ -268,6 +301,7 @@ function enemyTurn() {
 }
 
 setHealthBar();
+setManaBar();
 gameLoop();
 // Start Game by clicking on hero
 window.onclick = (event) => {
@@ -277,6 +311,10 @@ window.onclick = (event) => {
     playTurn(juliaTheArcher, randomMonster, monsterAlive);
   } else if (event.target == theCat.idSelector) {
     playTurn(theCat, randomMonster, monsterAlive);
+  } else if (event.target == williamTheHealer.idSelector) {
+    playTurn(williamTheHealer, randomMonster, monsterAlive);
+  } else if (event.target == jackTheLumberjack.idSelector) {
+    playTurn(jackTheLumberjack, randomMonster, monsterAlive);
   }
 
   if (event.target == modal) {
