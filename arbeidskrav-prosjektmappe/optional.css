@@ -4,6 +4,28 @@ button {
 #container {
   border-bottom: 3px solid black;
 }
+#nameless-knight-hp-text,
+#julia-the-archer-hp-text,
+#the-cat-hp-text,
+#big-boss-hp-text,
+#william-the-healer-mana-text,
+#jack-the-lumberjack-mana-text {
+  font-size: 1.5rem;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.life-bar,
+.mana-bar {
+  position: absolute;
+  font-size: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .stats-div {
   display: flex;
   gap: 5rem;
@@ -65,21 +87,27 @@ button {
 .friendly,
 .enemy,
 .monster,
-.damage {
+.damage,
+.heal {
   font-weight: bold;
   font-size: 1.1rem;
 }
 .friendly {
-  color: green;
+  color: lime;
 }
 .enemy {
   color: red;
 }
 .monster {
-  color: purple;
+  color: slateblue;
 }
 .damage {
+  font-size: 2em;
   color: yellow;
+}
+.heal {
+  font-size: 1.5em;
+  color: cyan;
 }
 #output-div {
   max-height: 220px;
@@ -148,4 +176,32 @@ hr {
   height: 50px;
   background-color: rgb(190, 190, 90);
   transition: ease-in-out 0.5s;
+}
+
+#appearing-monster-text {
+  font-size: 1.2rem;
+  position: absolute;
+  left: 650px;
+  bottom: 130px;
+}
+#arrow-div {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  left: 180px;
+  bottom: 80px;
+}
+#arrow-div img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.characters img {
+  transition: ease-out 5ms;
+}
+#big-boss {
+  transition: ease-out 1s;
 }

@@ -22,67 +22,81 @@
         <div class="life-bar-container knight-container">
             <img src="images/knight-head.png">
             <div class="life-bar" id="nameless-knight-hp-div"></div><!-- hp (Health Points) til ridderen -->
+            <div id="nameless-knight-hp-text">Placeholder</div>
         </div>
 
         <div class="life-bar-container julia-container">
             <img src="images/julia-head.png">
             <div class="life-bar" id="julia-the-archer-hp-div"></div><!-- hp (Health Points) til Julia -->
+            <div id="julia-the-archer-hp-text">Placeholder</div>
         </div>
 
         <div class="life-bar-container cat-container">
             <img src="images/cat-head.png" alt="">
             <div class="life-bar" id="the-cat-hp-div"></div><!-- hp (Health Points) til katten -->
+            <div id="the-cat-hp-text">Placeholder</div>
         </div>
 
         <div class="life-bar-container big-boss-container">
             <img src="images/big-boss-head.png" alt="">
             <div class="life-bar" id="big-boss-hp-div"></div><!-- hp (Health Points) til Big boss -->
+            <div id="big-boss-hp-text">Placeholder</div>
         </div>
 
         <!-- Mana Bars -->
         <div class="mana-bar-container healer-container">
             <img src="images/healer-head.png" alt="">
             <div class="mana-bar" id="william-the-healer-mana-div"></div><!-- mana (Mana Points) til William -->
+            <div id="william-the-healer-mana-text">Placeholder</div>
         </div>
 
         <div class="mana-bar-container lumberjack-container">
             <img src="images/lumberjack-head.png" alt="">
             <div class="mana-bar" id="jack-the-lumberjack-mana-div"></div><!-- mana (Mana Points) til Jack -->
+            <div id="jack-the-lumberjack-mana-text">Placeholder</div>
         </div>
 
 
-        <!-- The knight -->
-        <img id="nameless-knight" src="images/knight.png" alt="">
 
-        <!-- Julia the archer -->
-        <img id="julia-the-archer" src="images/julia-the-archer.png">
+        <div class="characters">
+            <!-- The knight -->
+            <img id="nameless-knight" src="images/knight.png" alt="">
 
-        <!-- The Cat -->
-        <img id="the-cat" src="images/cat.png" alt="">
-
-        <!-- William the healer -->
-        <img id="william-the-healer" src="images/healer.png">
-
-        <!-- Jack the lumberjack -->
-        <img id="jack-the-lumberjack" src="images/lumberjack.png" alt="">
-
-        <!-- The big evil boss -->
-        <img id="big-boss" src="images/big-boss.png" alt="">
-
-        <!-- Noen ganger dukker et monster opp her -->
-        <img id="appearing-monster" src="images/portal.png" alt="monster">
-
-        <div id="modal-div">
-            <div id="modal-content">
-
+            <div id="arrow-div">
+                <!-- Julia the archer -->
+                <img src="images/arrow.png" alt="arrow">
+                <p id="arrow-div-text">0x</p>
             </div>
-            <button id="modal-close-btn">X</button>
+            <img id="julia-the-archer" src="images/julia-the-archer.png">
+
+            <!-- The Cat -->
+            <img id="the-cat" src="images/cat.png" alt="">
+
+            <!-- William the healer -->
+            <img id="william-the-healer" src="images/healer.png">
+
+            <!-- Jack the lumberjack -->
+            <img id="jack-the-lumberjack" src="images/lumberjack.png" alt="">
+
+            <!-- The big evil boss -->
+            <img id="big-boss" src="images/big-boss.png" alt="">
+
+            <!-- Noen ganger dukker et monster opp her -->
+            <div id="appearing-monster-text"></div>
+            <img id="appearing-monster" src="images/portal.png" alt="monster">
+
+            <div id="modal-div">
+                <div id="modal-content">
+
+                </div>
+                <button id="modal-close-btn">X</button>
+            </div>
         </div>
     </div><!-- end container-->
 
 
     <!-- Her skrives det ut informasjon om hva brukeren gjør og hva som skjer. -->
-    <div class="menu-div">
+    <div id="menu-div" class="menu-div">
         <button id="show-stats">
             ShowStats
         </button>
