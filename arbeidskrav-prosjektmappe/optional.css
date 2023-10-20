@@ -39,10 +39,14 @@ button {
   display: flex;
   justify-content: space-evenly;
   border-bottom: 2px solid black;
-  padding: 1rem;
   text-align: center;
   width: 1200px;
-  background-color: rgb(255, 255, 255);
+  height: 30px;
+  background: radial-gradient(
+    circle at 24.1% 68.8%,
+    rgb(50, 50, 50) 0%,
+    rgb(0, 0, 0) 99.4%
+  );
   margin: auto;
   box-sizing: border-box;
 }
@@ -63,16 +67,18 @@ button {
   padding: 0.5rem;
   border: 1px solid black;
   border-radius: 5px;
-  background-color: rgb(255, 255, 255);
+  background-color: rgb(212, 60, 60);
   cursor: pointer;
   z-index: 20;
 }
 #modal-content {
+  position: absolute;
+  top: 25%;
   background: linear-gradient(
     180deg,
     rgba(255, 255, 255, 1),
     rgba(255, 255, 255, 0.9),
-    rgba(255, 255, 255, 0.5) 99%
+    rgba(255, 255, 255, 0.8) 99%
   );
   border: 2px solid black;
   padding: 1rem;
@@ -110,9 +116,15 @@ button {
   color: cyan;
 }
 #output-div {
-  max-height: 220px;
+  max-height: 260px;
   overflow-y: scroll;
   background-image: linear-gradient(150deg, #98b2da, #bba289);
+  background: radial-gradient(
+    circle at 24.1% 68.8%,
+    rgb(50, 50, 50) 0%,
+    rgb(0, 0, 0) 99.4%
+  );
+  color: azure;
 }
 p {
   animation: forwards fade 5ms;
@@ -203,5 +215,5 @@ hr {
   transition: ease-out 5ms;
 }
 #big-boss {
-  transition: ease-out 1s;
+  transition: ease-out 500ms;
 }

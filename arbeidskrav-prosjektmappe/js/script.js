@@ -143,7 +143,7 @@ function setHealthBar() {
   bigBoss.healthBar.style.width = "100%";
   bossHealthBarText.innerHTML = `<p>HP: ${bigBoss.health} / ${bigBoss.maxHealth}</p>`;
 
-  monsterText.innerHTML = `HP: ${slime.health} / ${slime.maxHealth}`;
+  // monsterText.innerHTML = `HP: ${slime.health} / ${slime.maxHealth}`;
 }
 function setManaBar() {
   williamTheHealer.manaBar.style.width = "100%";
@@ -232,10 +232,14 @@ function attack(attacker, damage, target) {
   let damageToTarget = damage;
   console.log("Target health Before: " + target.health);
 
-  target.health -= damageToTarget;
   console.log("Target health: " + target.health);
 
   updateVisuals(attacker, damage, target);
+  target.health -= damageToTarget;
+  if (target.health <= 0) {
+    target.health = 0;
+    outputText.innerHTML += `<p><span class="enemy">${target.name}</span> has died!</p>`;
+  }
 }
 
 let monsterAlive = false;
@@ -256,7 +260,6 @@ function spawnMonster() {
     randomMonster.health = randomMonster.maxHealth;
 
     outputText.innerHTML += `<p><span class="monster">${randomMonster.name}</span> has appeared!</p>`;
-    outputText.innerHTML += `<p><span class="monster">Monster</span> is preventing you from attacking boss, you must kill <span class="monster">${randomMonster.name}</span> first</p>`;
     autoScroll();
     return monsterAlive, randomMonster;
   }
@@ -325,9 +328,12 @@ function manaRegen() {
 }
 function healthRegen(characters) {}
 let turnCounter = 0;
-
+let playerInteracted = false;
 function gameLoop() {
   let gameState = "";
+  if (juliaArrows <= 0) {
+    outputText.innerHTML += `<p> <span class="friendly">${juliaTheArcher.name} is out of arrows, damage will be reduced</p>`;
+  }
 
   if (turnCounter != 0) {
     manaRegen();
@@ -353,7 +359,9 @@ function gameLoop() {
     outputText.innerHTML += `<p> Wait for him to regain to full</p>`;
     disableHero(jackTheLumberjack);
   }
-  outputText.innerHTML += `<h3>----------------------------- Turn ${turnCounter} -----------------------------</h3>`;
+  if (turnCounter != 0) {
+    outputText.innerHTML += `<h3>----------------------------- Turn ${turnCounter} -----------------------------</h3>`;
+  }
   turnCounter++;
   setTimeout(() => {
     autoScroll();
@@ -362,6 +370,9 @@ function gameLoop() {
 }
 function healTarget(target, amount) {
   target.health += amount;
+  if (target.health >= target.maxHealth) {
+    target.health = target.maxHealth;
+  }
   updateHealthBar(target);
   target.idSelector.style.filter =
     "brightness(100) sepia(100) saturate(10) hue-rotate(40deg)";
@@ -428,9 +439,8 @@ function supportTurn(support) {
   setTimeout(() => {
     enemyTurn();
   }, 1500);
-
-  console.log("Support turn");
 }
+console.log(turnCounter);
 // Main game loop, will playout a full turn once a hero is clicked
 let playerTurn = true;
 function playTurn(hero, randomMonster, monsterAlive) {
@@ -445,10 +455,8 @@ function playTurn(hero, randomMonster, monsterAlive) {
   // Target automatilly assigned to monster if it is alive
   let target;
   if (!monsterAlive) {
-    monsterText.style.display = "none";
     target = bigBoss;
   } else if (monsterAlive) {
-    monsterText.style.display = "block";
     target = randomMonster;
   }
   // Calculate damage, randomized amount between hero base damage and main stat
@@ -457,23 +465,24 @@ function playTurn(hero, randomMonster, monsterAlive) {
   // Check julia's arrows, if out of arrows, do reduced damage
   if (hero == juliaTheArcher && juliaArrows <= 0) {
     heroDamage * 0.2; /* Reduce damage by 80% */
-    outputText.innerHTML += `<p> <span class="friendly">${juliaTheArcher.name} is out of arrows, damage will be reduced</p>`;
   }
 
-  // Check if damage should apply to boss or monster
-  if (target == slime && hero == juliaTheArcher) {
-    heroDamage = 1;
-    outputText.innerHTML += `<p> <span class="damage">Ranged attacks</span> is reduced vs <span style="monster">${randomMonster.name}</span> is strong against ranged attacks!</p>`;
-  } else if (target == slime && hero == namelessKnight) {
-    heroDamage = 1;
-    outputText.innerHTML += `<p> <span class="damage">Melee attacks</span> is reduced vs <span style="monster">${randomMonster.name}</span> is strong against melee attacks!</p>`;
-  }
-  if (target == bat && hero == theCat) {
-    heroDamage = 1;
-    outputText.innerHTML += `<p> <span class="damage">Magic attacks</span> is reduced vs <span style="monster">${randomMonster.name}</span> is strong against magic attacks!</p>`;
-  } else if (target == bat && hero == namelessKnight) {
-    heroDamage = 1;
-    outputText.innerHTML += `<p> <span class="damage">Melee attacks</span> is reduced vs <span style="monster">${randomMonster.name}</span> is strong against melee attacks!</p>`;
+  // Check if damage should apply to monster
+  if (target == slime || target == bat) {
+    if (target == slime && hero == juliaTheArcher) {
+      heroDamage = 1;
+      outputText.innerHTML += `<p>Arrows are not very effective vs <span class="monster">${randomMonster}</span></p>`;
+    } else if (target == slime && hero == namelessKnight) {
+      heroDamage = 1;
+      outputText.innerHTML += `<p> <span>Melee attacks</span> are reduced vs <span style="monster">${randomMonster.name}</span> is strong against melee attacks!</p>`;
+    }
+    if (target == bat && hero == theCat) {
+      heroDamage = 1;
+      outputText.innerHTML += `<p> <span>Magic attacks</span> is reduced vs <span style="monster">${randomMonster.name}</span> is strong against magic attacks!</p>`;
+    } else if (target == bat && hero == namelessKnight) {
+      heroDamage = 1;
+      outputText.innerHTML += `<p> <span>Melee attacks</span> is reduced vs <span style="monster">${randomMonster.name}</span> is strong against melee attacks!</p>`;
+    }
   }
   // Once damage is calculated, apply it to the target
   attack(hero, heroDamage, target);
@@ -484,35 +493,58 @@ function playTurn(hero, randomMonster, monsterAlive) {
   }, 3000);
 
   // Automatically have enemy play their turn
-  setTimeout(() => {
-    enemyTurn();
-  }, 1500);
+  setTimeout(enemyTurn, 2500);
 }
 
 function enemyTurn() {
+  // End game if boss is dead
   if (bigBoss.health <= 0) {
     gameLoop();
   }
+
   let bossDamage = calculateDamage(bigBoss);
   let possibleTargets = [namelessKnight, juliaTheArcher, theCat];
 
+  // Filter out dead targets
   possibleTargets = possibleTargets.filter((target) => target.health > 0);
   // Randomly select a target from the possible targets array
   let randomTarget =
     possibleTargets[Math.floor(Math.random() * possibleTargets.length)];
+  let moves = ["stomp"];
+  let move = moves[Math.floor(Math.random() * moves.length)];
 
-  outputText.innerHTML += `<p><span class="enemy">${bigBoss.name}</span> retaliates, hits <span class="friendly">${randomTarget.name}</span> for <span class="damage">${bossDamage}</span> damage!</p>`;
+  if (move == "stomp") {
+    outputText.innerHTML += `<p><span class="enemy">${bigBoss.name}</span> stomps the ground, dealing <span class="damage">${bossDamage}</span> damage to everyone!</p>`;
+    bigBoss.idSelector.style.transform = "translateX(-600px)";
+    setTimeout(() => {
+      bigBoss.idSelector.style.transform = "translate(-600px, -200px)";
+    }, 900);
+    setTimeout(() => {
+      bigBoss.idSelector.style.transform = "translate(-600px, 20px)";
+    }, 1000);
+    setTimeout(() => {
+      bigBoss.idSelector.style.transform = "translate(0px, 0px) rotate(0deg)";
+      for (let target of possibleTargets) {
+        target.health -= bossDamage;
+        updateHealthBar(target);
+        damageTakenAnimation(target);
+      }
+    }, 3000);
+  } else {
+    outputText.innerHTML += `<p><span class="enemy">${bigBoss.name}</span> retaliates, hits <span class="friendly">${randomTarget.name}</span> for <span class="damage">${bossDamage}</span> damage!</p>`;
+
+    //Animation
+    bigBoss.idSelector.style.transform = "translateX(-600px) rotate(20deg)";
+    setTimeout(() => {
+      bigBoss.idSelector.style.transform = "translateX(0px)";
+    }, 300);
+    randomTarget.health -= bossDamage;
+  }
   autoScroll();
 
-  //Animation
-  bigBoss.idSelector.style.transform = "translateX(-600px) rotate(20deg)";
-  setTimeout(() => {
-    bigBoss.idSelector.style.transform = "translateX(0px)";
-  }, 300);
   damageTakenAnimation(randomTarget);
 
   //Do Damage and update healthbar
-  randomTarget.health -= bossDamage;
   updateHealthBar(randomTarget);
   if (randomTarget.health <= 0) {
     randomTarget.health = 0;
@@ -521,7 +553,7 @@ function enemyTurn() {
   }
   //Check for monster spawn
   if (!monsterAlive) {
-    spawnMonster();
+    setTimeout(spawnMonster, 2000);
   }
   //End turn by handing it over to the player
   setTimeout(() => {
@@ -534,12 +566,15 @@ setVisuals();
 setHealthBar();
 setManaBar();
 gameLoop();
+disableHero(williamTheHealer);
+disableHero(jackTheLumberjack);
 // Start Game by clicking on hero
 window.onclick = (event) => {
   if (event.target == namelessKnight.idSelector) {
     playTurn(namelessKnight, randomMonster, monsterAlive);
   } else if (event.target == juliaTheArcher.idSelector) {
     juliaArrows -= 1;
+    arrowText.innerHTML = `<div>x${juliaArrows}</div>`;
     playTurn(juliaTheArcher, randomMonster, monsterAlive);
   } else if (event.target == theCat.idSelector) {
     playTurn(theCat, randomMonster, monsterAlive);
