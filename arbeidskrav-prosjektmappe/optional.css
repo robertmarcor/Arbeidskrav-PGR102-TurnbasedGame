@@ -236,3 +236,24 @@ hr {
   z-index: 10;
   transition: ease-out 500ms;
 }
+#fire-strike {
+  display: none;
+  width: 8%;
+  left: 420px;
+  bottom: 50px;
+  z-index: 10;
+  transition: ease-out 500ms;
+}
+#knight-slash {
+  display: none;
+  width: 50%;
+  left: 380px;
+  top: 180px;
+}
+
+.bgm-div {
+  position: absolute;
+  left: 35vw;
+  top: 1rem;
+  text-align: center;
+}

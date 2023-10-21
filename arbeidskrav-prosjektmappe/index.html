@@ -12,8 +12,43 @@
 </head>
 
 <body>
+    <!-- Sound Effects -->
+    <audio id="slash-sound">
+        <source src="audio/sword-slash.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="arrow-sound">
+        <source src="audio/arrow-sound.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="fire-strike-sound">
+        <source src="audio/fire-strike-sound.ogg" type="audio/mpeg">
+    </audio>
+    <audio id="stomp-sound">
+        <source src="audio/stomp.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="heal-sound">
+        <source src="audio/heal-sound.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="hit-sound">
+        <source src="audio/hit-sound.wav" type="audio/mpeg">
+    </audio>
+    <audio id="super-hit-sound">
+        <source src="audio/super-hit-sound.wav" type="audio/mpeg">
+    </audio>
+    <audio id="victory-sound">
+        <source src="audio/victory.mp3" type="audio/mpeg">
+    </audio>
+
+
 
     <div id="container">
+        <!-- Background Music -->
+        <div class="bgm-div">
+            <audio controls autoplay id="bgm">
+                <source src="audio/bg-music.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            <p>BG Music</p>
+        </div>
 
         <!--
             Life bars 
@@ -61,17 +96,20 @@
         <div class="characters">
             <!-- The knight -->
             <img id="nameless-knight" src="images/knight.png" alt="">
+            <img src="images/slash.png" alt="slash" id="knight-slash">
 
+            <!-- Julia the archer -->
             <div id="arrow-div">
-                <!-- Julia the archer -->
                 <img src="images/arrow.png" alt="arrow">
                 <p id="arrow-div-text">0x</p>
             </div>
+
             <img src="images/arrow2.png" alt="arrow" id="arrow">
             <img id="julia-the-archer" src="images/julia-the-archer.png">
 
             <!-- The Cat -->
             <img id="the-cat" src="images/cat.png" alt="">
+            <img src="images/fire-strike.png" alt="firestrike" id="fire-strike">
 
             <!-- William the healer -->
             <img id="william-the-healer" src="images/healer.png">
@@ -89,30 +127,31 @@
             <!-- Stomp Effect -->
             <img src="images/stompFX.png" alt="stomp" id="ground-stomp">
 
+            <!-- Show Stats Modal -->
             <div id="modal-div">
-                <div id="modal-content">
-
-                </div>
+                <div id="modal-content"></div>
                 <button id="modal-close-btn">
                     <h2>Close</h2>
                 </button>
             </div>
         </div>
-    </div><!-- end container-->
+    </div>
+    <!-- end container-->
 
-
-    <!-- Her skrives det ut informasjon om hva brukeren gjør og hva som skjer. -->
+    <!-- Show Stats Modal -->
     <div id="menu-div" class="menu-div">
         <button id="show-stats">
             ShowStats
         </button>
     </div>
+    <!-- Her skrives det ut informasjon om hva brukeren gjør og hva som skjer. -->
     <div id="output-div">
         <h2>Adventure Land</h2>
         <p>Turn based combat game, click a hero to attack the boss</p>
         <p>You can also click supporting characters to aid the heroes in combat</p>
         <p>Game ends when either the boss reaches 0 health, or all heroes have died</p>
-        <p>Monsters can appear, preventing directly attacking the boss. Certain characters are more effective at taking
+        <p>Monsters can appear, preventing directly attacking the boss. Certain characters are more effective at
+            taking
             them out</p>
         <h3>----------------------------- Combat Log -----------------------------</h3>
     </div>
