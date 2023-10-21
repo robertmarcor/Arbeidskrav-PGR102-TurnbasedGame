@@ -27,7 +27,8 @@ button {
 body {
   display: grid;
   grid-template-rows: 660px 30px;
-  grid-template-columns: 1200px 1fr;
+  grid-template-columns: 1100px 1fr;
+  overflow-y: hidden;
 }
 
 @media screen and (min-width: 1500px) {
@@ -119,6 +120,7 @@ body {
 }
 #modal-close-btn {
   position: absolute;
+  left: 40%;
   bottom: 150px;
   margin: 1rem;
   padding: 0.5rem;
@@ -264,6 +266,34 @@ hr {
 }
 #big-boss {
   transition: ease-out 500ms;
+  /* animation: meteorStrike 2s ease-in; */
+}
+
+@keyframes meteorStrike {
+  0% {
+    transform: translate(0px, 0px);
+  }
+  35% {
+    transform: translate(150px, -500px) rotate(-145deg);
+  }
+  50% {
+    transform: translate(-400px, -50px) rotate(-145deg);
+  }
+  80% {
+    transform: translate(-400px, 0px) rotate(-145deg);
+  }
+  90% {
+    transform: translate(-400px, 50px) rotate(-145deg);
+  }
+  92% {
+    transform: translate(-400px, 25px) rotate(-145deg);
+  }
+  94% {
+    transform: translate(-400px, 50px) rotate(-145deg);
+  }
+  100% {
+    transform: translate(-400px, 0px) rotate(0deg);
+  }
 }
 
 #ground-stomp {
@@ -274,6 +304,13 @@ hr {
   width: 45%;
   height: 45%;
   animation: forwards ground-stomp 500ms;
+}
+#explosion {
+  display: none;
+  position: absolute;
+  width: 250px;
+  left: 200px;
+  bottom: 30px;
 }
 #arrow {
   display: none;
@@ -296,6 +333,7 @@ hr {
   width: 50%;
   left: 380px;
   top: 180px;
+  z-index: 10;
 }
 
 .bgm-div {
