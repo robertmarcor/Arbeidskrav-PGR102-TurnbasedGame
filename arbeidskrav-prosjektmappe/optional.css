@@ -265,6 +265,34 @@ hr {
 }
 #big-boss {
   transition: ease-out 500ms;
+  /* animation: meteorStrike 2s ease-in; */
+}
+
+@keyframes meteorStrike {
+  0% {
+    transform: translate(0px, 0px);
+  }
+  35% {
+    transform: translate(150px, -500px) rotate(-145deg);
+  }
+  50% {
+    transform: translate(-400px, -50px) rotate(-145deg);
+  }
+  80% {
+    transform: translate(-400px, 0px) rotate(-145deg);
+  }
+  90% {
+    transform: translate(-400px, 50px) rotate(-145deg);
+  }
+  92% {
+    transform: translate(-400px, 25px) rotate(-145deg);
+  }
+  94% {
+    transform: translate(-400px, 50px) rotate(-145deg);
+  }
+  100% {
+    transform: translate(-400px, 0px) rotate(0deg);
+  }
 }
 
 #ground-stomp {
@@ -275,6 +303,13 @@ hr {
   width: 45%;
   height: 45%;
   animation: forwards ground-stomp 500ms;
+}
+#explosion {
+  display: none;
+  position: absolute;
+  width: 250px;
+  left: 200px;
+  bottom: 30px;
 }
 #arrow {
   display: none;

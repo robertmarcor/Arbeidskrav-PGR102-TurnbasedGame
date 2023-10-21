@@ -24,6 +24,8 @@ const arrowSFX = document.getElementById("arrow-sound");
 const fireStrikeSFX = document.getElementById("fire-strike-sound");
 const hitSFX = document.getElementById("hit-sound");
 const superHitSFX = document.getElementById("super-hit-sound");
+const meteorStrikeSFX1 = document.getElementById("meteor1");
+const meteorStrikeSFX2 = document.getElementById("meteor2");
 const victorySFX = document.getElementById("victory-sound");
 
 //Selectors
@@ -43,6 +45,7 @@ const arrowGFX = document.getElementById("arrow");
 const swordSlashGFX = document.getElementById("knight-slash");
 const fireStrikeGFX = document.getElementById("fire-strike");
 const crackedEarth = document.getElementById("ground-stomp");
+const explosionGFX = document.getElementById("explosion");
 
 // Variables
 let playerTurn = true;
@@ -313,6 +316,19 @@ function bossAnim(move, bossDamage) {
       crackedEarth.style.display = "none";
       bigBoss.idSelector.style.transform = "translate(0px, 0px) rotate(0deg)";
       superHitSFX.play();
+    }, 3000);
+  } else if (move == "meteorStrike") {
+    outputText.innerHTML += `<p><span class="enemy">${bigBoss.name}</span> flies up in the air crashing down for <span class="damage">${bossDamage}</span>. BIG damage!</p>`;
+    meteorStrikeSFX1.play();
+    setTimeout(() => {
+      bigBoss.idSelector.style.animation = "meteorStrike 2s ease-in";
+    }, 1000);
+    setTimeout(() => {
+      explosionGFX.style.display = "block";
+    }, 2000);
+    setTimeout(() => {
+      superHitSFX.play();
+      explosionGFX.style.display = "none";
     }, 3000);
   } else {
     bigBoss.idSelector.style.transform = "translateX(-520px) rotate(20deg)";
@@ -589,7 +605,7 @@ function enemyTurn() {
       possibleTargets[Math.floor(Math.random() * possibleTargets.length)];
     // Randomly select a move from the possible moves array
     /* Only 1 move exists as of writing, default attack is used unless move exists */
-    let moves = ["stomp", "kick", "punch"];
+    let moves = ["stomp", "kick", "punch", "rage", "slam", "meteorStrike"];
     let move = moves[Math.floor(Math.random() * moves.length)];
 
     if (move == "stomp") {
@@ -602,6 +618,21 @@ function enemyTurn() {
           if (target.health <= 0) {
             target.health = 0;
           }
+          updateHealth(target);
+          damageTakenAnimation(target);
+        }
+      }, 3000);
+    } else if (move == "meteorStrike") {
+      bossDamage = Math.floor(bossDamage * 2);
+      bossAnim(move, bossDamage);
+      //Sync damage with Animation
+      setTimeout(() => {
+        for (let target of possibleTargets) {
+          target.health -= bossDamage;
+          if (target.health <= 0) {
+            target.health = 0;
+          }
+          meteorStrikeSFX2.play();
           updateHealth(target);
           damageTakenAnimation(target);
         }
