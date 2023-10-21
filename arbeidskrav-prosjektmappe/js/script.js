@@ -49,6 +49,7 @@ let playerTurn = true;
 let monsterAlive = false;
 let randomMonster;
 let turnCounter = 1;
+let timeBetweenTurns = 2100;
 // Construct Heroes, everone is constructed to be targetd via game functions
 // Example. hero.damage, target.health, etc.
 const nameslessHealthBar = document.getElementById("nameless-knight-hp-div");
@@ -288,7 +289,7 @@ function theCatAnim() {
   fireStrikeGFX.style.display = "block";
   fireStrikeSFX.play();
   setTimeout(() => {
-    fireStrikeGFX.style.transform = "translateX(600px)";
+    fireStrikeGFX.style.transform = "translateX(450px)";
   }, 300);
   setTimeout(() => {
     fireStrikeGFX.style.transform = "translateX(0px)";
@@ -299,12 +300,12 @@ function theCatAnim() {
 function bossAnim(move, bossDamage) {
   if (move == "stomp") {
     outputText.innerHTML += `<p><span class="enemy">${bigBoss.name}</span> stomps the ground, dealing <span class="damage">${bossDamage}</span> damage to everyone!</p>`;
-    bigBoss.idSelector.style.transform = "translateX(-600px)";
+    bigBoss.idSelector.style.transform = "translateX(-520px)";
     setTimeout(() => {
-      bigBoss.idSelector.style.transform = "translate(-600px, -200px)";
+      bigBoss.idSelector.style.transform = "translate(-520px, -200px)";
     }, 900);
     setTimeout(() => {
-      bigBoss.idSelector.style.transform = "translate(-600px, 20px)";
+      bigBoss.idSelector.style.transform = "translate(-520px, 20px)";
       crackedEarth.style.display = "block";
       stompSFX.play();
     }, 1000);
@@ -314,7 +315,7 @@ function bossAnim(move, bossDamage) {
       superHitSFX.play();
     }, 3000);
   } else {
-    bigBoss.idSelector.style.transform = "translateX(-600px) rotate(20deg)";
+    bigBoss.idSelector.style.transform = "translateX(-520px) rotate(20deg)";
     setTimeout(() => {
       bigBoss.idSelector.style.transform = "translateX(0px)";
     }, 300);
@@ -552,13 +553,8 @@ function playTurn(hero, randomMonster, monsterAlive) {
   // Once damage is calculated, apply it to the target
   attack(hero, heroDamage, target);
 
-  //Re-enable hero's, only if their health is not 0
-  setTimeout(() => {
-    ActivateAllHeros();
-  }, 4000);
-
   // Automatically have enemy play their turn
-  setTimeout(enemyTurn, 2000);
+  setTimeout(enemyTurn, timeBetweenTurns);
 }
 
 function supportTurn(support) {
@@ -573,15 +569,7 @@ function supportTurn(support) {
     jackCraft();
   }
 
-  // *NOTE could be moved to enemyTurn to not repeat code
-  setTimeout(() => {
-    //Re-enable hero's, only if their health is not 0
-    ActivateAllHeros();
-  }, 3200);
-
-  setTimeout(() => {
-    enemyTurn();
-  }, 1500);
+  setTimeout(enemyTurn, timeBetweenTurns);
 }
 
 function enemyTurn() {
@@ -639,6 +627,7 @@ function enemyTurn() {
     //End turn by handing it over to the player
     setTimeout(() => {
       playerTurn = true;
+      ActivateAllHeros();
       //Takes care of tuns, and auto scrolling
       gameLoop();
     }, 3000);
@@ -701,7 +690,7 @@ function gameLoop() {
   manaRegen();
   healthRegen();
 
-  outputText.innerHTML += `<h3>--------------------------- Turn ${turnCounter} ---------------------------</h3>`;
+  outputText.innerHTML += `<h3> ---------------- Turn ${turnCounter} ---------------- </h3>`;
 
   turnCounter++;
   setTimeout(autoScroll, 200);
@@ -710,6 +699,7 @@ function gameLoop() {
 
 // Start Game by clicking on hero
 window.onclick = (event) => {
+  bgm.play();
   //Checks for user clicks, if user clicks on a hero, play their turn
   //Knight Turn
   if (event.target == namelessKnight.idSelector) {
