@@ -690,7 +690,7 @@ function gameLoop() {
   manaRegen();
   healthRegen();
 
-  outputText.innerHTML += `<h3> ---------------- Turn ${turnCounter} ---------------- </h3>`;
+  outputText.innerHTML += `<hr> <h3> Turn ${turnCounter}</h3> <hr>`;
 
   turnCounter++;
   setTimeout(autoScroll, 200);
