@@ -8,6 +8,8 @@
 //
 //Characters are constructed with name, health, damage, mainStat, healthBar, idSelector
 //Imports from Character Constructor
+
+console.log("Version 1.0");
 import { Hero } from "./characterStats.js";
 import { Support } from "./characterStats.js";
 import { Boss } from "./characterStats.js";
