@@ -164,6 +164,7 @@ hr {
   width: 0;
   height: 50px;
   background-color: rgb(0, 90, 255);
+  transition: ease-in 0.5s;
 }
 
 .mana-bar-container {
@@ -215,5 +216,23 @@ hr {
   transition: ease-out 5ms;
 }
 #big-boss {
+  transition: ease-out 500ms;
+}
+
+#ground-stomp {
+  display: none;
+  position: absolute;
+  left: 110px;
+  bottom: -70px;
+  width: 45%;
+  height: 45%;
+  animation: forwards ground-stomp 500ms;
+}
+#arrow {
+  display: none;
+  width: 20%;
+  top: 560px;
+  left: 250px;
+  z-index: 10;
   transition: ease-out 500ms;
 }

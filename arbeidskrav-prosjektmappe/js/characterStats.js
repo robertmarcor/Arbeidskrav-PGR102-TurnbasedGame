@@ -7,7 +7,8 @@ export class Hero {
     mainStat,
     healthBar,
     healthBarText,
-    idSelector
+    idSelector,
+    image
   ) {
     this.name = name;
     this.health = health;
@@ -17,6 +18,7 @@ export class Hero {
     this.idSelector = idSelector;
     this.healthBarText = healthBarText;
     this.maxHealth = health; /* Needed to reference original starting HP */
+    this.image = image;
   }
 }
 // Support

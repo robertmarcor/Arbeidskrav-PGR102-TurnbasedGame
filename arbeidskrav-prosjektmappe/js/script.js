@@ -23,6 +23,7 @@ const menuDiv = document.getElementById("menu-div");
 const modal = document.getElementById("modal-div");
 const modalContent = document.getElementById("modal-content");
 const modalCloseBtn = document.getElementById("modal-close-btn");
+const crackedEarth = document.getElementById("ground-stomp");
 
 const showStatsBtn = document.getElementById("show-stats");
 
@@ -34,38 +35,42 @@ const namelessHealthBarText = document.getElementById(
 const namelessID = document.getElementById("nameless-knight");
 const namelessKnight = new Hero(
   "Nameless Knight",
-  150 /* HP */,
-  25 /* DMG */,
-  300 /* Main Stat */,
+  300 /* HP */,
+  50 /* DMG */,
+  80 /* Main Stat */,
   nameslessHealthBar /* Health Bar */,
   namelessHealthBarText /* Health Bar Text */,
-  namelessID /* ID Selector */
+  namelessID /* ID Selector */,
+  "knight.png" /* Image */
 );
 const juliaHealthBar = document.getElementById("julia-the-archer-hp-div");
 const juliaHealthBarText = document.getElementById("julia-the-archer-hp-text");
 const juliaID = document.getElementById("julia-the-archer");
 const arrowText = document.getElementById("arrow-div-text");
+const arrowGFX = document.getElementById("arrow");
 let juliaArrows = 3;
 const juliaTheArcher = new Hero(
   "Julia the Archer",
-  70 /* HP */,
+  150 /* HP */,
   120 /* DMG */,
-  30 /* Main Stat */,
+  20 /* Main Stat */,
   juliaHealthBar /* Health Bar */,
   juliaHealthBarText /* Health Bar Text */,
-  juliaID /* ID Selector */
+  juliaID /* ID Selector */,
+  "julia-the-archer.png" /* Image */
 );
 const catHealthBar = document.getElementById("the-cat-hp-div");
 const catHealthBarText = document.getElementById("the-cat-hp-text");
 const catID = document.getElementById("the-cat");
 const theCat = new Hero(
   "The Cat",
-  50 /* HP */,
-  500 /* DMG */,
-  400 /* Main Stat */,
+  100 /* HP */,
+  60 /* DMG */,
+  100 /* Main Stat */,
   catHealthBar /* Health Bar */,
   catHealthBarText /* Health Bar Text */,
-  catID /* ID Selector */
+  catID /* ID Selector */,
+  "cat.png" /* Image */
 );
 // Construct Support Stats/////////////////////////////////////
 const williamManaBar = document.getElementById("william-the-healer-mana-div");
@@ -105,8 +110,8 @@ const bossID = document.getElementById("big-boss");
 const bigBoss = new Boss(
   "Big Boss",
   1000 /* HP */,
-  20 /* DMG */,
-  80 /* Main Stat */,
+  25 /* DMG */,
+  100 /* Main Stat */,
   false /* Enrage */,
   bossHealthBar /* Health Bar */,
   bossHealthBarText /* Health Bar Text */,
@@ -115,8 +120,8 @@ const bigBoss = new Boss(
 // Construct Monsters///////////////////////////////
 const monsterImage = document.getElementById("appearing-monster");
 const monsterText = document.getElementById("appearing-monster-text");
-const slime = new Monster("Slime", 2 /* HP */, 10 /* DMG */, monsterImage);
-const bat = new Monster("Bat", 2 /* HP */, 20 /* DMG */, monsterImage);
+const slime = new Monster("Slime", 10 /* HP */, 10 /* DMG */, monsterImage);
+const bat = new Monster("Bat", 10 /* HP */, 20 /* DMG */, monsterImage);
 
 function logStats() {
   console.log(bigBoss);
@@ -151,7 +156,7 @@ function setManaBar() {
   jackTheLumberjack.manaBar.style.width = "100%";
   jackManaBarText.innerHTML = `<p>Mana: ${jackTheLumberjack.mana} / ${jackTheLumberjack.maxMana}</p>`;
 }
-function updateHealthBar(target) {
+function updateHealth(target) {
   //Health bars are set to 100% width at the start.
   //Max health is refered to as "full health"
   //Then calculate current health, to percentage of full health and set health bar equal to that
@@ -161,14 +166,17 @@ function updateHealthBar(target) {
   if (target.health <= 0) {
     target.healthBar.style.width = "0%";
     target.idSelector.src = `./images/headstone.png`;
+    disableHero(target);
   }
 }
 function updateManaBar(target) {
-  target.manaBar.style.width = `${(target.mana / target.maxMana) * 100}%`;
-  target.manaBarText.innerHTML = `<p>Mana: ${target.mana} / ${target.maxMana}</p>`;
   if (target.mana <= 0) {
     target.manaBar.style.width = "0%";
+  } else if (target.mana >= target.maxMana) {
+    target.mana = target.maxMana;
   }
+  target.manaBar.style.width = `${(target.mana / target.maxMana) * 100}%`;
+  target.manaBarText.innerHTML = `<p>Mana: ${target.mana} / ${target.maxMana}</p>`;
 }
 function damageTakenAnimation(target) {
   setTimeout(() => {
@@ -192,25 +200,28 @@ function damageTakenAnimation(target) {
 function updateVisuals(attacker, damage, target) {
   // Arrow counter for Julia
   outputText.innerHTML += `<p><span class="friendly">${attacker.name}</span> attacks <span class="enemy">${target.name}</span> for <span class="damage">${damage}</span> damage!</p>`;
+  outputText.innerHTML += `<p><span class="enemy">${target.name}</span> receives ${damage} incomming damage, ${target.health} remaining health after attack</p>`;
 
   //Nudge animation to simulate attacking
-  attacker.idSelector.style.transform = "translateX(20px)";
-  setTimeout(() => {
-    attacker.idSelector.style.transform = "translateX(0px)";
-  }, 300);
+  // attacker.idSelector.style.transform = "translateX(20px)";
+  // setTimeout(() => {
+  //   attacker.idSelector.style.transform = "translateX(0px)";
+  // }, 300);
 
   //Flash to indicate damage taken
   damageTakenAnimation(target);
 
   //Dont update health bar for monsters, since they dont have one
   if (target != slime && target != bat) {
-    updateHealthBar(target);
+    updateHealth(target);
+    console.log("Updated Health Bars");
   }
   //Instead reset image to portal if monster is killed, and set monsterAlive to false so it can respawn
   if (
     (target.health <= 0 && target == slime) ||
     (target.health <= 0 && target == bat)
   ) {
+    console.log("Monster has died");
     monsterAlive = false;
     setTimeout(() => {
       target.idSelector.src = `./images/portal.png`;
@@ -231,15 +242,14 @@ function calculateDamage(attacker) {
 function attack(attacker, damage, target) {
   let damageToTarget = damage;
   console.log("Target health Before: " + target.health);
-
+  target.health -= damageToTarget;
   console.log("Target health: " + target.health);
 
-  updateVisuals(attacker, damage, target);
-  target.health -= damageToTarget;
   if (target.health <= 0) {
     target.health = 0;
     outputText.innerHTML += `<p><span class="enemy">${target.name}</span> has died!</p>`;
   }
+  updateVisuals(attacker, damage, target);
 }
 
 let monsterAlive = false;
@@ -310,11 +320,9 @@ function gameOver(result) {
 function manaRegen() {
   if (williamTheHealer.mana >= williamTheHealer.maxMana) {
     williamTheHealer.mana = williamTheHealer.maxMana;
-    console.log("William mana is full");
   }
   if (jackTheLumberjack.mana >= jackTheLumberjack.maxMana) {
     jackTheLumberjack.mana = jackTheLumberjack.maxMana;
-    console.log("Jack mana is full");
   }
   if (williamTheHealer.mana < williamTheHealer.maxMana) {
     williamTheHealer.mana += williamTheHealer.manaRegen;
@@ -331,8 +339,20 @@ let turnCounter = 0;
 let playerInteracted = false;
 function gameLoop() {
   let gameState = "";
+  if (juliaTheArcher.health <= 0) {
+    disableHero(juliaTheArcher);
+  }
+  if (theCat.health <= 0) {
+    theCat.health = 0;
+    disableHero(theCat);
+    console.log("HELLO");
+  }
+  if (namelessKnight.health <= 0) {
+    disableHero(namelessKnight);
+  }
   if (juliaArrows <= 0) {
-    outputText.innerHTML += `<p> <span class="friendly">${juliaTheArcher.name} is out of arrows, damage will be reduced</p>`;
+    arrowText.innerHTML = `<div>x0</div>`;
+    outputText.innerHTML += `<p> <span class="friendly">${juliaTheArcher.name}</span> is out of arrows, damage will be reduced</p>`;
   }
 
   if (turnCounter != 0) {
@@ -369,21 +389,29 @@ function gameLoop() {
   return turnCounter;
 }
 function healTarget(target, amount) {
+  if (target.health <= 0) {
+    outputText.innerHTML += `<p><span class="friendly">${target.name}</span> has been resurrected</p>`;
+    activateHero(target);
+    target.idSelector.src = `./images/${target.image}`;
+  } else {
+    outputText.innerHTML += `<p><span class="friendly">${williamTheHealer.name}</span> heals <span class="friendly">${target.name}</span> for <span class="heal">${amount}</span> HP`;
+  }
   target.health += amount;
   if (target.health >= target.maxHealth) {
     target.health = target.maxHealth;
   }
-  updateHealthBar(target);
+  updateHealth(target);
   target.idSelector.style.filter =
     "brightness(100) sepia(100) saturate(10) hue-rotate(40deg)";
   setTimeout(() => {
     target.idSelector.style.filter = "";
   }, 150);
-  outputText.innerHTML += `<p><span class="friendly">${williamTheHealer.name}</span> heals <span class="friendly">${target.name}</span> for <span class="heal">${amount}</span> HP`;
 }
 function craftArrows(amount) {
   juliaArrows += amount;
   arrowText.innerHTML = `<div>x${juliaArrows}</div>`;
+  outputText.innerHTML += `<p><span class="friendly">${jackTheLumberjack.name}</span> crafts ${amount} arrows for <span class="friendly">${juliaTheArcher.name}</span></p>`;
+  autoScroll();
   return juliaArrows;
 }
 function updateMana(hero, amount) {
@@ -440,7 +468,6 @@ function supportTurn(support) {
     enemyTurn();
   }, 1500);
 }
-console.log(turnCounter);
 // Main game loop, will playout a full turn once a hero is clicked
 let playerTurn = true;
 function playTurn(hero, randomMonster, monsterAlive) {
@@ -464,24 +491,24 @@ function playTurn(hero, randomMonster, monsterAlive) {
 
   // Check julia's arrows, if out of arrows, do reduced damage
   if (hero == juliaTheArcher && juliaArrows <= 0) {
-    heroDamage * 0.2; /* Reduce damage by 80% */
+    heroDamage = Math.floor(heroDamage * 0.2); /* Reduce damage by 80% */
   }
 
   // Check if damage should apply to monster
   if (target == slime || target == bat) {
     if (target == slime && hero == juliaTheArcher) {
       heroDamage = 1;
-      outputText.innerHTML += `<p>Arrows are not very effective vs <span class="monster">${randomMonster}</span></p>`;
+      outputText.innerHTML += `<p>Arrows are not very effective vs <span class="monster">${randomMonster.name}</span></p>`;
     } else if (target == slime && hero == namelessKnight) {
       heroDamage = 1;
-      outputText.innerHTML += `<p> <span>Melee attacks</span> are reduced vs <span style="monster">${randomMonster.name}</span> is strong against melee attacks!</p>`;
+      outputText.innerHTML += `<p>Melee attacks are not very effective vs <span style="monster">${randomMonster.name}</span></p>`;
     }
     if (target == bat && hero == theCat) {
       heroDamage = 1;
-      outputText.innerHTML += `<p> <span>Magic attacks</span> is reduced vs <span style="monster">${randomMonster.name}</span> is strong against magic attacks!</p>`;
+      outputText.innerHTML += `<p>Magic attacks are not very effective vs <span style="monster">${randomMonster.name}</span></p>`;
     } else if (target == bat && hero == namelessKnight) {
       heroDamage = 1;
-      outputText.innerHTML += `<p> <span>Melee attacks</span> is reduced vs <span style="monster">${randomMonster.name}</span> is strong against melee attacks!</p>`;
+      outputText.innerHTML += `<p>Melee attacks are not very effective vs <span style="monster">${randomMonster.name}</span></p>`;
     }
   }
   // Once damage is calculated, apply it to the target
@@ -493,26 +520,10 @@ function playTurn(hero, randomMonster, monsterAlive) {
   }, 3000);
 
   // Automatically have enemy play their turn
-  setTimeout(enemyTurn, 2500);
+  setTimeout(enemyTurn, 2000);
 }
 
-function enemyTurn() {
-  // End game if boss is dead
-  if (bigBoss.health <= 0) {
-    gameLoop();
-  }
-
-  let bossDamage = calculateDamage(bigBoss);
-  let possibleTargets = [namelessKnight, juliaTheArcher, theCat];
-
-  // Filter out dead targets
-  possibleTargets = possibleTargets.filter((target) => target.health > 0);
-  // Randomly select a target from the possible targets array
-  let randomTarget =
-    possibleTargets[Math.floor(Math.random() * possibleTargets.length)];
-  let moves = ["stomp"];
-  let move = moves[Math.floor(Math.random() * moves.length)];
-
+function bossAnim(move, bossDamage) {
   if (move == "stomp") {
     outputText.innerHTML += `<p><span class="enemy">${bigBoss.name}</span> stomps the ground, dealing <span class="damage">${bossDamage}</span> damage to everyone!</p>`;
     bigBoss.idSelector.style.transform = "translateX(-600px)";
@@ -521,46 +532,68 @@ function enemyTurn() {
     }, 900);
     setTimeout(() => {
       bigBoss.idSelector.style.transform = "translate(-600px, 20px)";
+      crackedEarth.style.display = "block";
     }, 1000);
     setTimeout(() => {
+      crackedEarth.style.display = "none";
       bigBoss.idSelector.style.transform = "translate(0px, 0px) rotate(0deg)";
-      for (let target of possibleTargets) {
-        target.health -= bossDamage;
-        updateHealthBar(target);
-        damageTakenAnimation(target);
-      }
     }, 3000);
   } else {
-    outputText.innerHTML += `<p><span class="enemy">${bigBoss.name}</span> retaliates, hits <span class="friendly">${randomTarget.name}</span> for <span class="damage">${bossDamage}</span> damage!</p>`;
-
-    //Animation
     bigBoss.idSelector.style.transform = "translateX(-600px) rotate(20deg)";
     setTimeout(() => {
       bigBoss.idSelector.style.transform = "translateX(0px)";
     }, 300);
-    randomTarget.health -= bossDamage;
   }
-  autoScroll();
+}
+function enemyTurn() {
+  // End game if boss is dead
+  if (bigBoss.health <= 0) {
+    gameOver("win");
+  } else if (bigBoss.health > 0) {
+    let bossDamage = calculateDamage(bigBoss);
+    let possibleTargets = [namelessKnight, juliaTheArcher, theCat];
 
-  damageTakenAnimation(randomTarget);
+    // Filter out dead targets
+    possibleTargets = possibleTargets.filter((target) => target.health > 0);
+    // Randomly select a target from the possible targets array
+    let randomTarget =
+      possibleTargets[Math.floor(Math.random() * possibleTargets.length)];
+    // Randomly select a move from the possible moves array
+    let moves = ["stomp", "kick", "punch"];
+    let move = moves[Math.floor(Math.random() * moves.length)];
 
-  //Do Damage and update healthbar
-  updateHealthBar(randomTarget);
-  if (randomTarget.health <= 0) {
-    randomTarget.health = 0;
-    randomTarget.idSelector.style.pointerEvents = "none";
-    outputText.innerHTML += `<p><span class="friendly">${randomTarget.name}</span> has died!</p>`;
+    if (move == "stomp") {
+      bossDamage = Math.floor(bossDamage * 0.5);
+      bossAnim(move, bossDamage);
+      setTimeout(() => {
+        for (let target of possibleTargets) {
+          target.health -= bossDamage;
+          updateHealth(target);
+          damageTakenAnimation(target);
+        }
+      }, 3000);
+    } else {
+      outputText.innerHTML += `<p><span class="enemy">${bigBoss.name}</span> retaliates, hits <span class="friendly">${randomTarget.name}</span> for <span class="damage">${bossDamage}</span> damage!</p>`;
+      bossAnim(move, randomTarget, bossDamage);
+      randomTarget.health -= bossDamage;
+    }
+    autoScroll();
+
+    damageTakenAnimation(randomTarget);
+
+    //Do Damage and update healthbar
+    updateHealth(randomTarget);
+    //Check for monster spawn
+    if (!monsterAlive) {
+      setTimeout(spawnMonster, 3100);
+    }
+    //End turn by handing it over to the player
+    setTimeout(() => {
+      playerTurn = true;
+      //Takes care of tuns, and auto scrolling
+      gameLoop();
+    }, 3000);
   }
-  //Check for monster spawn
-  if (!monsterAlive) {
-    setTimeout(spawnMonster, 2000);
-  }
-  //End turn by handing it over to the player
-  setTimeout(() => {
-    playerTurn = true;
-    //Takes care of tuns, and auto scrolling
-    gameLoop();
-  }, 2000);
 }
 setVisuals();
 setHealthBar();
@@ -568,6 +601,17 @@ setManaBar();
 gameLoop();
 disableHero(williamTheHealer);
 disableHero(jackTheLumberjack);
+
+function juliaAnim() {
+  arrowGFX.style.display = "block";
+  setTimeout(() => {
+    arrowGFX.style.transform = "translateX(600px)";
+  }, 300);
+  setTimeout(() => {
+    arrowGFX.style.transform = "translateX(0px)";
+    arrowGFX.style.display = "none";
+  }, 1000);
+}
 // Start Game by clicking on hero
 window.onclick = (event) => {
   if (event.target == namelessKnight.idSelector) {
@@ -576,12 +620,17 @@ window.onclick = (event) => {
     juliaArrows -= 1;
     arrowText.innerHTML = `<div>x${juliaArrows}</div>`;
     playTurn(juliaTheArcher, randomMonster, monsterAlive);
+    juliaAnim();
   } else if (event.target == theCat.idSelector) {
     playTurn(theCat, randomMonster, monsterAlive);
   } else if (event.target == williamTheHealer.idSelector) {
     supportTurn(williamTheHealer);
   } else if (event.target == jackTheLumberjack.idSelector) {
-    supportTurn(jackTheLumberjack);
+    if (jackTheLumberjack.mana >= 50) {
+      supportTurn(jackTheLumberjack);
+    } else {
+      outputText.innerHTML += `<p> <span class="friendly">${jackTheLumberjack.name}</span> is out of mana, crafting arrows cost 50MP</p>`;
+    }
   }
 
   if (event.target == modal) {
