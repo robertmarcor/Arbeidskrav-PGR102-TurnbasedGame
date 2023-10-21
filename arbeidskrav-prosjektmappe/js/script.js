@@ -440,7 +440,7 @@ function attack(attacker, damage, target) {
 
 function healTarget(target, amount) {
   // Revive target if dead, and reset image from headstone to character
-  if (target.health <= 0) {
+  if (target.health <= 5) {
     outputText.innerHTML += `<p><span class="friendly">${target.name}</span> has been resurrected</p>`;
     activateHero(target);
     target.idSelector.src = `./images/${target.image}`;
