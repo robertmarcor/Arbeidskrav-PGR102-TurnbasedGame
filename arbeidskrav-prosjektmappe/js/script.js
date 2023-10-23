@@ -17,7 +17,7 @@ import { Monster } from "./characterStats.js";
 
 //Audio Selectors
 const bgm = document.getElementById("bgm");
-bgm.volume = 0.04;
+bgm.volume = 0.1;
 
 const swordSFX = document.getElementById("slash-sound");
 const stompSFX = document.getElementById("stomp-sound");
