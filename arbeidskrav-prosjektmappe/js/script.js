@@ -20,15 +20,25 @@ const bgm = document.getElementById("bgm");
 bgm.volume = 0.1;
 
 const swordSFX = document.getElementById("slash-sound");
+swordSFX.volume = 0.8;
 const stompSFX = document.getElementById("stomp-sound");
+stompSFX.volume = 0.5;
 const healSFX = document.getElementById("heal-sound");
+healSFX.volume = 0.5;
 const arrowSFX = document.getElementById("arrow-sound");
+arrowSFX.volume = 0.5;
 const fireStrikeSFX = document.getElementById("fire-strike-sound");
+fireStrikeSFX.volume = 0.5;
 const hitSFX = document.getElementById("hit-sound");
+hitSFX.volume = 0.5;
 const superHitSFX = document.getElementById("super-hit-sound");
+superHitSFX.volume = 0.5;
 const meteorStrikeSFX1 = document.getElementById("meteor1");
+meteorStrikeSFX1.volume = 0.5;
 const meteorStrikeSFX2 = document.getElementById("meteor2");
+meteorStrikeSFX2.volume = 0.5;
 const victorySFX = document.getElementById("victory-sound");
+victorySFX.volume = 0.5;
 
 //Selectors
 const outputText =
@@ -54,7 +64,7 @@ let playerTurn = true;
 let monsterAlive = false;
 let randomMonster;
 let turnCounter = 1;
-let timeBetweenTurns = 2100;
+let timeBetweenTurns = 1500;
 // Construct Heroes, everone is constructed to be targetd via game functions
 // Example. hero.damage, target.health, etc.
 const nameslessHealthBar = document.getElementById("nameless-knight-hp-div");
@@ -65,9 +75,9 @@ const namelessHealthBarText = document.getElementById(
 const namelessID = document.getElementById("nameless-knight");
 const namelessKnight = new Hero(
   "Nameless Knight",
-  300 /* HP */,
+  500 /* HP */,
   50 /* DMG */,
-  80 /* Main Stat */,
+  150 /* Main Stat */,
   nameslessHealthBar /* Health Bar */,
   namelessHealthBarText /* Health Bar Text */,
   namelessID /* ID Selector */,
@@ -77,11 +87,11 @@ const namelessKnight = new Hero(
 const juliaHealthBar = document.getElementById("julia-the-archer-hp-div");
 const juliaHealthBarText = document.getElementById("julia-the-archer-hp-text");
 const juliaID = document.getElementById("julia-the-archer");
-let juliaArrows = 3; /* Julia Ammunition for doing attacks */
+let juliaArrows = 4; /* Julia Ammunition for doing attacks */
 const juliaTheArcher = new Hero(
   "Julia the Archer",
-  150 /* HP */,
-  120 /* DMG */,
+  300 /* HP */,
+  100 /* DMG */,
   20 /* Main Stat */,
   juliaHealthBar /* Health Bar */,
   juliaHealthBarText /* Health Bar Text */,
@@ -94,7 +104,7 @@ const catHealthBarText = document.getElementById("the-cat-hp-text");
 const catID = document.getElementById("the-cat");
 const theCat = new Hero(
   "The Cat",
-  100 /* HP */,
+  200 /* HP */,
   60 /* DMG */,
   100 /* Main Stat */,
   catHealthBar /* Health Bar */,
@@ -143,9 +153,9 @@ const bossHealthBarText = document.getElementById("big-boss-hp-text");
 const bossID = document.getElementById("big-boss");
 const bigBoss = new Boss(
   "Big Boss",
-  1000 /* HP */,
+  1200 /* HP */,
   25 /* DMG */,
-  100 /* Main Stat */,
+  110 /* Main Stat */,
   false /* Enrage, becomes stronger under certain thresholds */,
   bossHealthBar /* Health Bar */,
   bossHealthBarText /* Health Bar Text */,
@@ -223,14 +233,16 @@ function updateHealth(target) {
 }
 
 function healthRegen() {
-  let healthRegen = 5;
-  for (let hero of [namelessKnight, juliaTheArcher, theCat]) {
-    //Prevent health from going above max
-    if (hero.health < hero.maxHealth || hero.health <= 0) {
-      hero.health += Math.floor(Math.random() * healthRegen);
-      updateHealth(hero);
-    }
-  }
+  // let healthRegen = 5;
+  // for (let hero of [namelessKnight, juliaTheArcher, theCat]) {
+  //   //Prevent health from going above max or regen if dead
+  //   if (hero.health < 1 && hero.health >= hero.maxHealth) {
+  //     return;
+  //   } else {
+  //     hero.health += Math.floor(Math.random() * healthRegen);
+  //     updateHealth(hero);
+  //   }
+  // }
 }
 
 function updateMana(hero, amount) {
@@ -320,7 +332,7 @@ function bossAnim(move, bossDamage) {
       superHitSFX.play();
     }, 3000);
   } else if (move == "meteorStrike") {
-    outputText.innerHTML += `<p><span class="enemy">${bigBoss.name}</span> flies up in the air crashing down for <span class="damage">${bossDamage}</span>. BIG damage!</p>`;
+    outputText.innerHTML += `<p><span class="enemy">${bigBoss.name}</span> flies up in the air crashing down for <span class="damage">${bossDamage}</span>. BIG damage to everyone!</p>`;
     meteorStrikeSFX1.play();
     setTimeout(() => {
       bigBoss.idSelector.style.animation = "meteorStrike 2s ease-in";
@@ -329,6 +341,7 @@ function bossAnim(move, bossDamage) {
       explosionGFX.style.display = "block";
     }, 2000);
     setTimeout(() => {
+      bigBoss.idSelector.style.animation = "";
       superHitSFX.play();
       explosionGFX.style.display = "none";
     }, 3000);
@@ -448,6 +461,16 @@ function healTarget(target, amount) {
     outputText.innerHTML += `<p><span class="friendly">${williamTheHealer.name}</span> heals <span class="friendly">${target.name}</span> for <span class="heal">${amount}</span> HP`;
   }
   target.health += amount;
+  let doubleCast = Math.random() * 1;
+
+  if (doubleCast < 0.25) {
+    outputText.innerHTML += `<p><span class="friendly">${williamTheHealer.name}</span> was inpired, and casts another heal!</p> `;
+    setTimeout(healTarget(target, amount), 2000);
+  } else if (target.health < 25 && doubleCast < 0.5) {
+    outputText.innerHTML += `<p><span class="friendly">${williamTheHealer.name}</span> was inpired, and casts another heal!</p> `;
+    setTimeout(healTarget(target, amount), 2000);
+  }
+
   // Health set to max if overhealed
   if (target.health >= target.maxHealth) {
     target.health = target.maxHealth;
@@ -461,6 +484,7 @@ function healTarget(target, amount) {
   setTimeout(() => {
     target.idSelector.style.filter = "";
   }, 150);
+  autoScroll();
 }
 function craftArrows(amount) {
   juliaArrows += amount;
@@ -655,7 +679,7 @@ function enemyTurn() {
     //Do Damage and update healthbar
     //Check for monster spawn
     if (!monsterAlive) {
-      setTimeout(spawnMonster, 3100);
+      setTimeout(spawnMonster, timeBetweenTurns);
     }
     //End turn by handing it over to the player
     setTimeout(() => {
@@ -663,7 +687,7 @@ function enemyTurn() {
       ActivateAllHeros();
       //Takes care of tuns, and auto scrolling
       gameLoop();
-    }, 3000);
+    }, timeBetweenTurns);
   }
 }
 setVisuals();
@@ -675,6 +699,8 @@ function gameOver(result) {
   menuDiv.style.display = "none";
   outputText.style.maxHeight = "100vh";
   outputText.style.height = "100%";
+  outputText.style.maxWidth = "100vw";
+  outputText.style.width = "100%";
   if (result == "win") {
     outputText.innerHTML += `<h1>Game Over</h1>`;
     outputText.innerHTML += `<p>Big Boss has been defeated!</p>`;
@@ -746,6 +772,11 @@ window.onclick = (event) => {
   }
   // Julias Turn
   else if (event.target == juliaTheArcher.idSelector) {
+    if (juliaArrows <= 0) {
+      outputText.innerHTML += `<p> <span class="friendly">${juliaTheArcher.name}</span> is out of arrows, click Jack to craft more</p>`;
+      autoScroll();
+      return;
+    }
     juliaArrows -= 1;
     arrowText.innerHTML = `<div>x${juliaArrows}</div>`;
     playTurn(juliaTheArcher, randomMonster, monsterAlive);
@@ -763,6 +794,7 @@ window.onclick = (event) => {
       supportTurn(williamTheHealer);
     } else {
       outputText.innerHTML += `<p> <span class="friendly">${williamTheHealer.name}</span> is out of mana, healing costs 20MP</p>`;
+      autoScroll();
     }
   }
   // Jack The Lumberjack
@@ -771,6 +803,7 @@ window.onclick = (event) => {
       supportTurn(jackTheLumberjack);
     } else {
       outputText.innerHTML += `<p> <span class="friendly">${jackTheLumberjack.name}</span> is out of mana, crafting arrows cost 50MP</p>`;
+      autoScroll();
     }
   }
 
